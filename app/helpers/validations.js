@@ -14,7 +14,8 @@ required files
 */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import env from '../../env';
+import dotenv from 'dotenv';
+dotenv.config();
 
 /**
    * Hash Password Method
@@ -93,7 +94,7 @@ const generateUserToken = (email, id, is_admin, first_name, last_name) => {
         first_name,
         last_name,
     },
-        env.secret, { expiresIn: '3d' });
+        process.env.SECRET, { expiresIn: '3d' });
     return token;
 };
 

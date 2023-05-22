@@ -13,10 +13,8 @@
 required files
 */
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import { errorMessage, status } from '../helpers/status';
-import env from '../../env';
-
+import dotenv from 'dotenv';
 dotenv.config();
 
 /**
