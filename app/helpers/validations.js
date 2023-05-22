@@ -1,6 +1,39 @@
+/******************************************************************************
+ *  @Execution      : default node : cmd> nodemon validations.js
+ *  @description    : This file is used to validate the request
+ * 
+ *  @file           : BidMentor Backend Application
+ *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 21-may-2023
+ ******************************************************************************/
+
+/*
+required files
+*/
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import env from '../../env';
-import { jwt } from 'jsonwebtoken';
-import dotenv from 'dotenv';
+
+/**
+   * Hash Password Method
+   * @param {string} password
+   * @returns {string} returns hashed password
+   */
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
+const hashPassword = password => bcrypt.hashSync(password, salt);
+
+/**
+   * comparePassword
+   * @param {string} hashPassword
+   * @param {string} password
+   * @returns {Boolean} return True or False
+   */
+const comparePassword = (hashedPassword, password) => {
+    return bcrypt.compareSync(password, hashedPassword);
+};
 
 /**
    * isValidEmail helper method
@@ -48,25 +81,29 @@ const empty = (input) => {
 };
 
 /**
-   * generate user token
-   * @param {string, integer} input
-   * @returns {Boolean} True or False
+   * Generate Token
+   * @param {string} id
+   * @returns {string} token
    */
-const generateUserToken = (email, id, f_name, l_name, is_admin) => {
+const generateUserToken = (email, id, is_admin, first_name, last_name) => {
     const token = jwt.sign({
         email,
-        userId: id,
+        user_id: id,
         is_admin,
-        f_name,
-        l_name
+        first_name,
+        last_name,
     },
-        process.env.SECRETEKY, { expiresIn: '2d' });
+        env.secret, { expiresIn: '3d' });
     return token;
 };
 
+
 export {
+    hashPassword,
+    comparePassword,
     isValidEmail,
     validatePassword,
     isEmpty,
-    empty
+    empty,
+    generateUserToken,
 };

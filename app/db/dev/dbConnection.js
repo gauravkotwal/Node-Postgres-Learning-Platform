@@ -1,3 +1,17 @@
+/******************************************************************************
+ *  @Execution      : default node : cmd> nodemon dbConnection.js
+ *  @description    : This file is used to write the DB queries
+ * 
+ *  @file           : BidMentor Backend Application
+ *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 19-may-2023
+ ******************************************************************************/
+
+/*
+required files
+*/
 import pool from './pool';
 
 pool.on('connect', () => {
