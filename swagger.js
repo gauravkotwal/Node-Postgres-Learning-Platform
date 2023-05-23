@@ -5,7 +5,7 @@
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
+ *  @version        : 1.1
  *  @since          : 22-may-2023
  ******************************************************************************/
 /*
@@ -15,9 +15,9 @@ const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
     definition: {
-        openapi: '1.0.0',
+        openapi: '3.0.0',
         info: {
-            title: 'BidMentor Application Backend API',
+            title: 'BidMentor Nodejs Application',
             version: '1.0.0',
             description: 'API documentation using Swagger',
         },
@@ -27,7 +27,7 @@ const options = {
             },
         ],
     },
-    apis: ['./app/routes/*.js'], // Replace with the path to your API routes files
+    apis: ['./app/routes/userRoute.js'], // Replace with the path to your API routes files
 };
 
 const specs = swaggerJsdoc(options);

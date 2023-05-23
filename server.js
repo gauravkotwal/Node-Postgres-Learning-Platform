@@ -14,8 +14,7 @@ required files
 import express from 'express';
 import 'babel-polyfill';
 import cors from 'cors';
-import usersRoute from './app/routes/userRoute';
-const swaggerRoute = require('./swagger');
+const swaggerRoute = require('./app/routes/swagger');
 
 import dotenv from 'dotenv';
 dotenv.config();
