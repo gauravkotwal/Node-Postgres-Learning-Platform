@@ -28,7 +28,7 @@ const router = express.Router();
  *       200:
  *         description: A list of users.
  */
-router.post('/signUp', verifyAuth, createUser);
+router.post('/signup', createUser);
 
 /**
  * @swagger
