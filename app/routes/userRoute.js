@@ -28,6 +28,8 @@ const router = express.Router();
  *       200:
  *         description: A list of users.
  */
+
+//need to check on token verification on signup page
 router.post('/signup', createUser);
 
 /**

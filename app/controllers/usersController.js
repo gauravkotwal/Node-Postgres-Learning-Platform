@@ -96,6 +96,8 @@ const siginUser = async (req, res) => {
         errorMessage.error = 'Please enter a valid Email or Password';
         return res.status(status.bad).send(errorMessage);
     }
+
+    // will update all the queries in separet constant file
     const signinUserQuery = 'SELECT * FROM users WHERE email = $1';
     try {
         const { rows } = await dbQuery.query(signinUserQuery, [email]);
@@ -108,6 +110,8 @@ const siginUser = async (req, res) => {
             errorMessage.error = 'The password you provided is incorrect';
             return res.status(status.bad).send(errorMessage);
         }
+
+        // In next PR will also update these files
         const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.is_admin, dbResponse.first_name, dbResponse.last_name);
         delete dbResponse.password;
         successMessage.data = dbResponse;
