@@ -81,7 +81,7 @@ const createUser = async (req, res) => {
 };
 
 /**
-   * Signin
+   * deleteUser
    * @param {object} req
    * @param {object} res
    * @returns {object} user object
@@ -123,7 +123,42 @@ const siginUser = async (req, res) => {
     }
 };
 
+/**
+   * Signin
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} user object
+   */
+const deleteUser = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        const errorMessage = { error: 'Email is missing' };
+        return res.status(status.bad).send(errorMessage);
+    }
+
+    // Move the SQL query to a separate constant file for better organization
+
+    const deleteUserQuery = 'DELETE FROM users WHERE email = $1';
+
+    try {
+        const { rowCount } = await dbQuery.query(deleteUserQuery, [email]);
+        if (rowCount === 0) {
+            const errorMessage = { error: 'User with this email does not exist' };
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        const successMessage = { message: 'User deleted successfully' };
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        const errorMessage = { error: 'Operation was not successful' };
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     createUser,
     siginUser,
+    deleteUser
 };

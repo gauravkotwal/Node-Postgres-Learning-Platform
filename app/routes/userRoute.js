@@ -14,7 +14,7 @@ required files
 */
 import express from 'express';
 
-import { createUser, siginUser } from '../controllers/usersController';
+import { createUser, siginUser, deleteUser } from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
@@ -22,7 +22,7 @@ const router = express.Router();
  * @swagger
  * /signUp:
  *   get:
- *     summary: Register new user
+ *     summary: Register user
  *     description: user can create account.
  *     responses:
  *       200:
@@ -36,11 +36,23 @@ router.post('/signup', createUser);
  * @swagger
  * /login:
  *   get:
- *     summary: login
+ *     summary: login user
  *     description: user can login.
  *     responses:
  *       200:
  *         description: A list of users.
  */
-router.get('/login', verifyAuth, siginUser);
+router.delete('/login', verifyAuth, siginUser);
+
+/**
+ * @swagger
+ * /login:
+ *   get:
+ *     summary: delete user
+ *     description: user can login.
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.post('/delete', deleteUser);
 export default router;
