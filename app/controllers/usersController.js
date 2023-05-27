@@ -5,7 +5,7 @@
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
+ *  @version        : 1.1
  *  @since          : 19-may-2023
  ******************************************************************************/
 
@@ -25,34 +25,44 @@ import {
 } from '../helpers/validations';
 
 import { errorMessage, successMessage, status } from '../helpers/status';
+import { Constants } from '../constants/constant';
 
-/**
-   * Create A User
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} reflection object
-   */
+
+/*********************************************************************************
+* Create A User
+* @param {object} req
+* @param {object} res
+* @returns {object} reflection object
+*********************************************************************************/
 const createUser = async (req, res) => {
     const { email, first_name, last_name, password } = req.body;
 
+    // timestamp for user creation
     const created_on = moment(new Date());
+
+    // Parameter Check
     if (isEmpty(email) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
         errorMessage.error = 'Email, password, first name and last name field cannot be empty';
         return res.status(status.bad).send(errorMessage);
     }
+
+    // Email Validation
     if (!isValidEmail(email)) {
         errorMessage.error = 'Please enter a valid Email';
         return res.status(status.bad).send(errorMessage);
     }
+
+    // Password alidation
     if (!validatePassword(password)) {
         errorMessage.error = 'Password must be more than five(5) characters';
         return res.status(status.bad).send(errorMessage);
     }
+
+    // Password encryption
     const hashedPassword = hashPassword(password);
-    const createUserQuery = `INSERT INTO
-      users(email, first_name, last_name, password, created_on)
-      VALUES($1, $2, $3, $4, $5)
-      returning *`;
+
+    // db query used to ingest a user with provided values
+    const createUserQuery = Constants.REGISTER_QUERY;
     const values = [
         email,
         first_name,
@@ -65,12 +75,14 @@ const createUser = async (req, res) => {
         const { rows } = await dbQuery.query(createUserQuery, values);
         const dbResponse = rows[0];
         delete dbResponse.password;
+
+        // A token has been generated for the logged-in user and attached into response
         const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
         successMessage.data = dbResponse;
         successMessage.data.token = token;
+
         return res.status(status.created).send(successMessage);
     } catch (error) {
-        console.log("ERROR in CATCH ", error)
         if (error.routine === '_bt_check_unique') {
             errorMessage.error = 'User with that EMAIL already exist';
             return res.status(status.conflict).send(errorMessage);
@@ -80,12 +92,12 @@ const createUser = async (req, res) => {
     }
 };
 
-/**
-   * deleteUser
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} user object
-   */
+/***********************************************************************************
+* deleteUser
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
 const siginUser = async (req, res) => {
     const { email, password } = req.body;
     if (isEmpty(email) || isEmpty(password)) {
@@ -98,7 +110,7 @@ const siginUser = async (req, res) => {
     }
 
     // will update all the queries in separet constant file
-    const signinUserQuery = 'SELECT * FROM users WHERE email = $1';
+    const signinUserQuery = Constants.LOGIN_QUERY;
     try {
         const { rows } = await dbQuery.query(signinUserQuery, [email]);
         const dbResponse = rows[0];
@@ -123,12 +135,12 @@ const siginUser = async (req, res) => {
     }
 };
 
-/**
-   * Signin
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} user object
-   */
+/***********************************************************************************
+* Signin
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
 const deleteUser = async (req, res) => {
     const { email } = req.body;
 
@@ -139,7 +151,7 @@ const deleteUser = async (req, res) => {
 
     // Move the SQL query to a separate constant file for better organization
 
-    const deleteUserQuery = 'DELETE FROM users WHERE email = $1';
+    const deleteUserQuery = Constants.DELETE_QUERY;
 
     try {
         const { rowCount } = await dbQuery.query(deleteUserQuery, [email]);
