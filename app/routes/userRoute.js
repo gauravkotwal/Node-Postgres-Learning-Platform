@@ -13,15 +13,20 @@
 required files
 */
 import express from 'express';
-
-import { createUser, siginUser, deleteUser, getAllUser, ssoLogin } from '../controllers/usersController';
+import {
+    createUser,
+    siginUser,
+    deleteUser,
+    getAllUser
+} from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
-router.post('/signup', createUser);
+router.post('/signUp', createUser);
 router.delete('/login', verifyAuth, siginUser);
 router.post('/delete', deleteUser);
 router.get('/fetch-all-users', getAllUser);
 router.post('/sso-login', verifyAuth, siginUser);
+
 export default router;

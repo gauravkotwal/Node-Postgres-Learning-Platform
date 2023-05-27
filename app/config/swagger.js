@@ -13,7 +13,8 @@
 required files
 */
 const swaggerJsdoc = require('swagger-jsdoc');
-const endpoints = require('./swaggerSchema')
+const swaggerUi = require('swagger-ui-express');
+const endpoints = require('../../swaggerSchema')
 
 const options = {
     definition: {
@@ -31,6 +32,7 @@ const options = {
         paths: Object.entries(endpoints).reduce((paths, [key, value]) => {
             paths[value.path] = {
                 [value.method]: {
+                    requestBody: value.requestBody,
                     summary: value.summary,
                     description: value.description,
                     responses: value.responses,
@@ -39,9 +41,13 @@ const options = {
             return paths;
         }, {}),
     },
-    apis: ['./app/routes/*.js'],
+    apis: ['app/routes/userRoute.js'], // Update the path to your route files
 }
 
 const specs = swaggerJsdoc(options);
 
-module.exports = specs;
+module.exports = (app) => {
+    // Serve the Swagger UI at /api-docs
+    app.use('/api-docs', swaggerUi.serve);
+    app.get('/api-docs', swaggerUi.setup(specs));
+};

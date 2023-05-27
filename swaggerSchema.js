@@ -1,9 +1,25 @@
 const ssoLoginSchema = {
-    registerUser: {
+    createUser: {
         path: '/signUp',
         method: 'post',
-        summary: 'Register user',
+        summary: 'Create user',
         description: 'Create a new user account',
+        requestBody: {
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            email: { type: 'string' },
+                            first_name: { type: 'string' },
+                            last_name: { type: 'string' },
+                            password: { type: 'string' }
+                        },
+                        required: ['email', 'first_name', 'last_name', 'password']
+                    }
+                }
+            }
+        },
         responses: {
             '201': {
                 description: 'Success',
@@ -12,6 +28,7 @@ const ssoLoginSchema = {
                         schema: {
                             type: 'object',
                             properties: {
+                                status: { type: 'string' },
                                 data: {
                                     type: 'object',
                                     properties: {
@@ -19,13 +36,13 @@ const ssoLoginSchema = {
                                         first_name: { type: 'string' },
                                         last_name: { type: 'string' },
                                         created_on: { type: 'string' },
-                                        token: { type: 'string' },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+                                        token: { type: 'string' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             },
             '400': {
                 description: 'Bad Request',
@@ -34,11 +51,11 @@ const ssoLoginSchema = {
                         schema: {
                             type: 'object',
                             properties: {
-                                error: { type: 'string' },
-                            },
-                        },
-                    },
-                },
+                                error: { type: 'string' }
+                            }
+                        }
+                    }
+                }
             },
             '500': {
                 description: 'Internal Server Error',
@@ -47,15 +64,15 @@ const ssoLoginSchema = {
                         schema: {
                             type: 'object',
                             properties: {
-                                error: { type: 'string' },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+                                error: { type: 'string' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
-    loginUser: {
+    siginUser: {
         path: '/login',
         method: 'post',
         summary: 'Login user',
@@ -115,7 +132,7 @@ const ssoLoginSchema = {
             // Define other possible response codes and descriptions here
         },
     },
-    fetchAllUsers: {
+    getAllUser: {
         path: '/fetch-all-users',
         method: 'get',
         summary: 'Fetch all users',

@@ -14,7 +14,7 @@ required files
 import express from 'express';
 import 'babel-polyfill';
 import cors from 'cors';
-const swaggerRoute = require('./app/routes/swagger');
+const swagger = require('./app/config/swagger');
 import usersRoute from './app/routes/userRoute';
 
 import dotenv from 'dotenv';
@@ -29,9 +29,11 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// Initialize Swagger
+swagger(app);
+
 // Use the Swagger route
-app.use('/', swaggerRoute);
-app.use('/api', usersRoute);
+app.use('/v1', usersRoute);
 
 
 app.listen(process.env.PORT).on('listening', () => {
