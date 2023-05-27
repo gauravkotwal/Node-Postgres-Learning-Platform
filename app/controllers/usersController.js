@@ -26,8 +26,7 @@ import {
 
 import { errorMessage, successMessage, status } from '../helpers/status';
 import { Constants } from '../constants/constant';
-import { verify } from 'jsonwebtoken';
-import verifyToken from '../helpers/verifyAuth';
+import sendmail from '../config/sendMail';
 
 
 /*********************************************************************************
@@ -76,12 +75,20 @@ const createUser = async (req, res) => {
     try {
         const { rows } = await dbQuery.query(createUserQuery, values);
         const dbResponse = rows[0];
-        delete dbResponse.password;
 
         // A token has been generated for the logged-in user and attached into response
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.password);
+
+        delete dbResponse.password;
         successMessage.data = dbResponse;
-        successMessage.data.token = token;
+
+        // User full name
+        const userName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
+        const url = `http://localhost:3000/api/sso-login?token=${encodeURIComponent(token)}`;
+
+        // sendmail for the verification
+        sendmail.sendmailServices(url, userName);
+        successMessage.message = "Signup email has been sent successfully! Please check your email and verify your account";
 
         return res.status(status.created).send(successMessage);
     } catch (error) {

@@ -5,7 +5,7 @@
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.1
+ *  @version        : 1.2
  *  @since          : 19-may-2023
  ******************************************************************************/
 

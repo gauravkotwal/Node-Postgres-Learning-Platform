@@ -36,6 +36,8 @@ const options = {
                     summary: value.summary,
                     description: value.description,
                     responses: value.responses,
+                    path: value.path,
+                    method:value.method
                 }
             };
             return paths;
