@@ -8,10 +8,12 @@
  *  @version        : 1.1
  *  @since          : 22-may-2023
  ******************************************************************************/
+
 /*
 required files
 */
 const swaggerJsdoc = require('swagger-jsdoc');
+const endpoints = require('./swaggerSchema')
 
 const options = {
     definition: {
@@ -26,9 +28,19 @@ const options = {
                 url: 'http://localhost:3000', // Replace with your server URL
             },
         ],
+        paths: Object.entries(endpoints).reduce((paths, [key, value]) => {
+            paths[value.path] = {
+                [value.method]: {
+                    summary: value.summary,
+                    description: value.description,
+                    responses: value.responses,
+                }
+            };
+            return paths;
+        }, {}),
     },
-    apis: ['./app/routes/*.js'], // Replace with the path to your API routes files
-};
+    apis: ['./app/routes/*.js'],
+}
 
 const specs = swaggerJsdoc(options);
 

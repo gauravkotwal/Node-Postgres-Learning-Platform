@@ -18,65 +18,10 @@ import { createUser, siginUser, deleteUser, getAllUser, ssoLogin } from '../cont
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
-/**
- * @swagger
- * /signUp:
- *   get:
- *     summary: Register user
- *     description: user can create account.
- *     responses:
- *       200:
- *         description: A list of users.
- */
 
-//need to check on token verification on signup page
 router.post('/signup', createUser);
-
-/**
- * @swagger
- * /login:
- *   get:
- *     summary: login user
- *     description: user can login.
- *     responses:
- *       200:
- *         description: A list of users.
- */
 router.delete('/login', verifyAuth, siginUser);
-
-/**
- * @swagger
- * /login:
- *   get:
- *     summary: delete user
- *     description: user can delete existing user.
- *     responses:
- *       200:
- *         description: A list of users.
- */
 router.post('/delete', deleteUser);
-
-/**
- * @swagger
- * /fetchAllUser:
- *   get:
- *     summary: get all user
- *     description: user can check all the exising user details.
- *     responses:
- *       200:
- *         description: A list of users.
- */
 router.get('/fetch-all-users', getAllUser);
-
-/**
- * @swagger
- * /sso-login:
- *   get:
- *     summary: login with token
- *     description: user can with token.
- *     responses:
- *       200:
- *         description: sso login.
- */
 router.post('/sso-login', verifyAuth, siginUser);
 export default router;
