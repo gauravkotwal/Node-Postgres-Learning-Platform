@@ -14,7 +14,7 @@ required files
 */
 import express from 'express';
 
-import { createUser, siginUser, deleteUser } from '../controllers/usersController';
+import { createUser, siginUser, deleteUser, getAllUser } from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
@@ -49,10 +49,22 @@ router.delete('/login', verifyAuth, siginUser);
  * /login:
  *   get:
  *     summary: delete user
- *     description: user can login.
+ *     description: user can delete existing user.
  *     responses:
  *       200:
  *         description: A list of users.
  */
 router.post('/delete', deleteUser);
+
+/**
+ * @swagger
+ * /fetchAllUser:
+ *   get:
+ *     summary: get all user
+ *     description: user can check all the exising user details.
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.get('/fetch-all-users', getAllUser);
 export default router;

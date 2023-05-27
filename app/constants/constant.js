@@ -15,4 +15,5 @@ export class Constants {
     static LOGIN_QUERY = 'SELECT * FROM users WHERE email = $1';
     static DELETE_QUERY = 'DELETE FROM users WHERE email = $1';
     static UPDATE_QUERY = ''; // Add your update query here
+    static GETALLUSER_QUERY = 'SELECT * FROM users;'
 }

@@ -92,8 +92,85 @@ const createUser = async (req, res) => {
     }
 };
 
+
 /***********************************************************************************
-* deleteUser
+* delete
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
+const deleteUser = async (req, res) => {
+    const { email } = req.body;
+
+    // Email check
+    if (!email) {
+        const errorMessage = { error: 'Email is missing' };
+        return res.status(status.bad).send(errorMessage);
+    }
+
+    // db query used to delete the existing user
+    const deleteUserQuery = Constants.DELETE_QUERY;
+
+    try {
+        const { rowCount } = await dbQuery.query(deleteUserQuery, [email]);
+
+        // If email doesn't exist in the table
+        if (rowCount === 0) {
+            const errorMessage = { error: 'User with this email does not exist' };
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        const successMessage = { message: 'User deleted successfully' };
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        const errorMessage = { error: 'Operation was not successful' };
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
+/***********************************************************************************
+* fetch all the users
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
+const getAllUser = async (req, res) => {
+
+    // db query used to delete the existing user
+    const getAllUserQuery = Constants.GETALLUSER_QUERY;
+
+    try {
+        const { rows, rowCount } = await dbQuery.query(getAllUserQuery, null);
+
+        // If email doesn't exist in the table
+        if (rowCount === 0) {
+            const errorMessage = { error: 'No Record Found' };
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        // response strucutre
+        const finalResponse = [];
+
+        rows.map(req => {
+            finalResponse.push({
+                userName : `${req.first_name} ${req.last_name}`,
+                email : req.email,
+                requestedDate : req.created_on
+            })
+        })
+
+        const successMessage = { data: [...finalResponse] };
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        const errorMessage = { error: 'Operation was not successful' };
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
+/***********************************************************************************
+* signin
 * @param {object} req
 * @param {object} res
 * @returns {object} user object
@@ -135,42 +212,10 @@ const siginUser = async (req, res) => {
     }
 };
 
-/***********************************************************************************
-* Signin
-* @param {object} req
-* @param {object} res
-* @returns {object} user object
-**********************************************************************************/
-const deleteUser = async (req, res) => {
-    const { email } = req.body;
-
-    if (!email) {
-        const errorMessage = { error: 'Email is missing' };
-        return res.status(status.bad).send(errorMessage);
-    }
-
-    // Move the SQL query to a separate constant file for better organization
-
-    const deleteUserQuery = Constants.DELETE_QUERY;
-
-    try {
-        const { rowCount } = await dbQuery.query(deleteUserQuery, [email]);
-        if (rowCount === 0) {
-            const errorMessage = { error: 'User with this email does not exist' };
-            return res.status(status.notfound).send(errorMessage);
-        }
-
-        const successMessage = { message: 'User deleted successfully' };
-        return res.status(status.success).send(successMessage);
-    } catch (error) {
-        const errorMessage = { error: 'Operation was not successful' };
-        return res.status(status.error).send(errorMessage);
-    }
-};
-
 
 export {
     createUser,
     siginUser,
-    deleteUser
+    deleteUser,
+    getAllUser
 };

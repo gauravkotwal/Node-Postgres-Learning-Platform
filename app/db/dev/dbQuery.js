@@ -23,13 +23,16 @@ export default {
      */
     query(quertText, params) {
         return new Promise((resolve, reject) => {
-            pool.query(quertText, params)
-                .then((res) => {
-                    resolve(res);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
+            let check;
+            if (params == '' || null || undefined)
+                check = pool.query(quertText)
+            else check = pool.query(quertText, params)
+            
+            check.then((res) => {
+                resolve(res);
+            }).catch((err) => {
+                reject(err);
+            });
         });
     },
 };
