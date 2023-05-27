@@ -5,7 +5,7 @@
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
+ *  @version        : 1.1
  *  @since          : 19-may-2023
  ******************************************************************************/
 
@@ -13,6 +13,7 @@
 required files
 */
 import pool from './pool';
+import { Constants } from '../../constants/constant';
 
 pool.on('connect', () => {
     console.log('connected to the db');
@@ -20,19 +21,9 @@ pool.on('connect', () => {
 
 /**
  * Create User Table
- * CREATE TABLE test
-  (id SERIAL PRIMARY KEY, 
-  name VARCHAR(100) UNIQUE NOT NULL, 
-  phone VARCHAR(100));
  */
 const createUserTable = () => {
-    const userCreateQuery = `CREATE TABLE IF NOT EXISTS users
-  (id SERIAL PRIMARY KEY, 
-  email VARCHAR(100) UNIQUE NOT NULL, 
-  first_name VARCHAR(100), 
-  last_name VARCHAR(100), 
-  password VARCHAR(100) NOT NULL,
-  created_on DATE NOT NULL)`;
+    const userCreateQuery = Constants.TABLE_CREATION;
 
     pool.query(userCreateQuery)
         .then((res) => {
@@ -49,7 +40,7 @@ const createUserTable = () => {
  * Drop User Table
  */
 const dropUserTable = () => {
-    const usersDropQuery = 'DROP TABLE IF EXISTS users';
+    const usersDropQuery = Constants.DROP_TABLE;
     pool.query(usersDropQuery)
         .then((res) => {
             console.log(res);

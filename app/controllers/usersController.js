@@ -26,6 +26,8 @@ import {
 
 import { errorMessage, successMessage, status } from '../helpers/status';
 import { Constants } from '../constants/constant';
+import { verify } from 'jsonwebtoken';
+import verifyToken from '../helpers/verifyAuth';
 
 
 /*********************************************************************************
@@ -154,9 +156,9 @@ const getAllUser = async (req, res) => {
 
         rows.map(req => {
             finalResponse.push({
-                userName : `${req.first_name} ${req.last_name}`,
-                email : req.email,
-                requestedDate : req.created_on
+                userName: `${req.first_name} ${req.last_name}`,
+                email: req.email,
+                requestedDate: req.created_on
             })
         })
 
@@ -177,24 +179,32 @@ const getAllUser = async (req, res) => {
 **********************************************************************************/
 const siginUser = async (req, res) => {
     const { email, password } = req.body;
+
+    // Email & Password Check
     if (isEmpty(email) || isEmpty(password)) {
         errorMessage.error = 'Email or Password detail is missing';
         return res.status(status.bad).send(errorMessage);
     }
+
+    // Password Validation
     if (!isValidEmail(email) || !validatePassword(password)) {
         errorMessage.error = 'Please enter a valid Email or Password';
         return res.status(status.bad).send(errorMessage);
     }
 
-    // will update all the queries in separet constant file
+    // Find the userin exising table based on req params
     const signinUserQuery = Constants.LOGIN_QUERY;
     try {
         const { rows } = await dbQuery.query(signinUserQuery, [email]);
         const dbResponse = rows[0];
+
+        // If email doesn't exist
         if (!dbResponse) {
             errorMessage.error = 'User with this email does not exist';
             return res.status(status.notfound).send(errorMessage);
         }
+
+        // Compare the user password
         if (!comparePassword(dbResponse.password, password)) {
             errorMessage.error = 'The password you provided is incorrect';
             return res.status(status.bad).send(errorMessage);

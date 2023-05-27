@@ -14,7 +14,7 @@ required files
 */
 import express from 'express';
 
-import { createUser, siginUser, deleteUser, getAllUser } from '../controllers/usersController';
+import { createUser, siginUser, deleteUser, getAllUser, ssoLogin } from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
@@ -67,4 +67,16 @@ router.post('/delete', deleteUser);
  *         description: A list of users.
  */
 router.get('/fetch-all-users', getAllUser);
+
+/**
+ * @swagger
+ * /sso-login:
+ *   get:
+ *     summary: login with token
+ *     description: user can with token.
+ *     responses:
+ *       200:
+ *         description: sso login.
+ */
+router.post('/sso-login', verifyAuth, siginUser);
 export default router;

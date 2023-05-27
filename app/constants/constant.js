@@ -7,6 +7,15 @@
 
 // Exporting the constants as a class
 export class Constants {
+    static TABLE_CREATION = `CREATE TABLE IF NOT EXISTS users
+    (id SERIAL PRIMARY KEY, 
+    email VARCHAR(100) UNIQUE NOT NULL, 
+    first_name VARCHAR(100), 
+    last_name VARCHAR(100), 
+    password VARCHAR(100) NOT NULL,
+    created_on DATE NOT NULL)`;
+    static DROP_TABLE = 'DROP TABLE IF EXISTS users'
+
     static REGISTER_QUERY = `INSERT INTO
       users(email, first_name, last_name, password, created_on)
       VALUES($1, $2, $3, $4, $5)
