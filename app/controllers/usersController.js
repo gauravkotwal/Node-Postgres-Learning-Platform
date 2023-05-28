@@ -211,6 +211,13 @@ const siginUser = async (req, res) => {
             return res.status(status.notfound).send(errorMessage);
         }
 
+
+        // User is not verified. Please verify user before login
+        if (dbResponse.verification === false) {
+            errorMessage.error = 'User is not verified. Please verify user before login';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
         // Compare the user password
         if (!comparePassword(dbResponse.password, password)) {
             errorMessage.error = 'The password you provided is incorrect';
