@@ -77,14 +77,14 @@ const createUser = async (req, res) => {
         const dbResponse = rows[0];
 
         // A token has been generated for the logged-in user and attached into response
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.password);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
 
         delete dbResponse.password;
         successMessage.data = dbResponse;
 
         // User full name
         const userName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
-        const url = `http://localhost:3000/api/sso-login?token=${encodeURIComponent(token)}`;
+        const url = `http://localhost:3000/v1/verification?token=${encodeURIComponent(token)}`;
 
         // sendmail for the verification
         sendmail.sendmailServices(url, userName);
@@ -230,9 +230,48 @@ const siginUser = async (req, res) => {
 };
 
 
+/***********************************************************************************
+* verification
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
+const verification = async (req, res) => {
+    const { email, user_id } = req.user;
+
+    // Find the userin exising table based on req params
+    const signinUserQuery = Constants.FETCHDATA_QUERY;
+    try {
+
+        const { rows } = await dbQuery.query(signinUserQuery, [email, user_id]);
+        const dbResponse = rows[0];
+        console.log("dbResponse ::::::: ", dbResponse)
+
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'User with this email does not exist';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        delete dbResponse.password;
+        successMessage.message = `User verification successful. You can now proceed to login`;
+        successMessage.data = {
+            email: dbResponse.email,
+            verification: dbResponse.verification
+        };
+
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        errorMessage.error = 'Error in user verification! Please try again';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     createUser,
     siginUser,
     deleteUser,
-    getAllUser
+    getAllUser,
+    verification
 };

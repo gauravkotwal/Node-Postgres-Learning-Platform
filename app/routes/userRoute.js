@@ -17,16 +17,18 @@ import {
     createUser,
     siginUser,
     deleteUser,
-    getAllUser
+    getAllUser,
+    verification
 } from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
 router.post('/signUp', createUser);
-router.delete('/login', verifyAuth, siginUser);
+router.post('/login', siginUser);
 router.post('/delete', deleteUser);
 router.get('/fetch-all-users', getAllUser);
-router.post('/sso-login', verifyAuth, siginUser);
+router.get('/verification', verifyAuth, verification);
+// router.get('/sso-login', verifyAuth, siginUser);
 
 export default router;

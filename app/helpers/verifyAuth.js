@@ -13,6 +13,7 @@
 required files
 */
 import jwt from 'jsonwebtoken';
+const url = require('url');
 import { errorMessage, status } from '../helpers/status';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -26,18 +27,21 @@ dotenv.config();
    */
 
 const verifyToken = async (req, res, next) => {
+
+  const paramToken = req.url.split("token=")[1];
   const { token } = req.headers;
 
-  if (!token) {
+  if (!token && !paramToken) {
     errorMessage.error = 'Token not provided';
     return res.status(status.bad).send(errorMessage);
   }
   try {
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = token ? jwt.verify(token, process.env.SECRET) : jwt.verify(paramToken, process.env.SECRET);
+    console.log("decoded ::::: ", decoded)
+
     req.user = {
       email: decoded.email,
       user_id: decoded.user_id,
-      is_admin: decoded.is_admin,
       first_name: decoded.first_name,
       last_name: decoded.last_name,
     };

@@ -23,6 +23,12 @@ export class Constants {
       RETURNING *`;
 
   static LOGIN_QUERY = 'SELECT * FROM users WHERE email = $1';
+  static FETCHDATA_QUERY = `
+  UPDATE users
+  SET verification = true
+  WHERE email = $1 AND id = $2
+  RETURNING *;
+`;
   static DELETE_QUERY = 'DELETE FROM users WHERE email = $1';
   static UPDATE_QUERY = ''; // Add your update query here
   static GETALLUSER_QUERY = 'SELECT * FROM users;'
