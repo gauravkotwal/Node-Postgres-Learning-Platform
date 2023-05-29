@@ -84,10 +84,11 @@ const createUser = async (req, res) => {
 
         // User full name
         const userName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
+        const subject = `Action Required: Verify Your Account for ${userName}`
         const url = `http://localhost:3000/v1/verification?token=${encodeURIComponent(token)}`;
 
         // sendmail for the verification
-        sendmail.sendmailServices(url, userName);
+        sendmail.sendmailServices(url, subject);
         successMessage.message = "Signup email has been sent successfully! Please check your email and verify your account";
 
         return res.status(status.created).send(successMessage);
@@ -165,7 +166,8 @@ const getAllUser = async (req, res) => {
             finalResponse.push({
                 userName: `${req.first_name} ${req.last_name}`,
                 email: req.email,
-                requestedDate: req.created_on
+                requestedDate: req.created_on,
+                verification: req.verification
             })
         })
 
@@ -275,10 +277,54 @@ const verification = async (req, res) => {
 };
 
 
+/***********************************************************************************
+* forgotPassword
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    // Find the userin exising table based on req params
+    const signinUserQuery = Constants.LOGIN_QUERY;
+    try {
+
+        const { rows } = await dbQuery.query(signinUserQuery, [email]);
+        const dbResponse = rows[0];
+        console.log("dbResponse ::::::: ", dbResponse)
+
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'User with this email does not exist';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        successMessage.message = `we've sent password reset instructions to the primary email address on the account`;
+        successMessage.data = {
+            email: dbResponse.email,
+            username: `${dbResponse.first_name} ${dbResponse.last_name}`
+        };
+
+        const url = `${dbResponse.token}`;
+        const subject = `Password Reset Request for ${dbResponse.first_name} ${dbResponse.last_name}`
+
+        // sendmail for the verification
+        sendmail.sendmailServices(url, subject);
+
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        errorMessage.error = 'Error in user verification! Please try again';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     createUser,
     siginUser,
     deleteUser,
     getAllUser,
-    verification
+    verification,
+    forgotPassword
 };

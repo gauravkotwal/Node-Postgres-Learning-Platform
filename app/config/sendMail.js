@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer');
  * sendEmailFunction
  * @param {String} url - Verification URL or reset password link
  */
-exports.sendmailServices = (url, name) => {
+exports.sendmailServices = (url, subject) => {
     // Create a transporter using nodemailer
     const transporter = nodemailer.createTransport({
         service: process.env.SERVICE,
@@ -30,7 +30,7 @@ exports.sendmailServices = (url, name) => {
     const mailOptions = {
         from: process.env.MAIL_FROM,
         to: process.env.MAIL_FROM,
-        subject: `Action Required: Verify Your Account for ${name}`,
+        subject: subject,
         text: 'Please go through the email verification link provided in this mail:\n\n' + url
     };
 

@@ -18,7 +18,8 @@ import {
     siginUser,
     deleteUser,
     getAllUser,
-    verification
+    verification,
+    forgotPassword
 } from '../controllers/usersController';
 import verifyAuth from '../helpers/verifyAuth';
 
@@ -29,6 +30,7 @@ router.post('/login', siginUser);
 router.post('/delete', deleteUser);
 router.get('/fetch-all-users', getAllUser);
 router.get('/verification', verifyAuth, verification);
+router.post('/forgotPassword', forgotPassword);
 // router.get('/sso-login', verifyAuth, siginUser);
 
 export default router;
