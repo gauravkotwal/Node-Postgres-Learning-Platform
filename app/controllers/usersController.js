@@ -5,7 +5,7 @@
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.1
+ *  @version        : 1.4
  *  @since          : 19-may-2023
  ******************************************************************************/
 
@@ -300,24 +300,81 @@ const forgotPassword = async (req, res) => {
             return res.status(status.notfound).send(errorMessage);
         }
 
+
+        // A token has been generated for the reset password
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
+
         successMessage.message = `we've sent password reset instructions to the primary email address on the account`;
+        successMessage.data = {
+            email: dbResponse.email,
+            username: `${dbResponse.first_name} ${dbResponse.last_name}`,
+            token: token
+        };
+
+        const subject = `Password Reset Request for ${dbResponse.first_name} ${dbResponse.last_name}`
+
+        // sendmail for the verification
+        sendmail.sendmailServices(token, subject);
+
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        errorMessage.error = 'Error during forgot password! Please try again';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
+/***********************************************************************************
+* resetPassword
+* @param {object} req
+* @param {object} res
+* @returns {object} user object
+**********************************************************************************/
+const resetPassword = async (req, res) => {
+    const { email } = req.user;
+    const { password, confirmPassword } = req.body;
+
+    // Find the user in the existing table based on req params
+    const resetPasswordQuery = Constants.RESETPASS_QUERY;
+    try {
+        // Password and ConfirmPassword should be the same
+        if (password !== confirmPassword) {
+            errorMessage.error = 'Password and confirm password should be the same';
+            return res.status(status.bad).send(errorMessage);
+        }
+
+        // Password validation
+        if (!validatePassword(password)) {
+            errorMessage.error = 'Password must be more than five (5) characters';
+            return res.status(status.bad).send(errorMessage);
+        }
+
+        // Password encryption
+        const hashedPassword = hashPassword(password);
+
+        const { rows } = await dbQuery.query(resetPasswordQuery, [hashedPassword, email]);
+        const dbResponse = rows[0];
+        console.log("dbResponse ::::::: ", dbResponse)
+
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'User with this email does not exist';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        successMessage.message = 'Password reset successfully!';
         successMessage.data = {
             email: dbResponse.email,
             username: `${dbResponse.first_name} ${dbResponse.last_name}`
         };
 
-        const url = `${dbResponse.token}`;
-        const subject = `Password Reset Request for ${dbResponse.first_name} ${dbResponse.last_name}`
-
-        // sendmail for the verification
-        sendmail.sendmailServices(url, subject);
-
         return res.status(status.success).send(successMessage);
     } catch (error) {
-        errorMessage.error = 'Error in user verification! Please try again';
+        errorMessage.error = 'Error in resetting password! Please try again.';
         return res.status(status.error).send(errorMessage);
     }
 };
+
 
 
 export {
@@ -326,5 +383,6 @@ export {
     deleteUser,
     getAllUser,
     verification,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 };
