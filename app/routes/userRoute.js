@@ -33,6 +33,8 @@ router.get('/fetch-all-users', getAllUser);
 router.get('/verification', verifyAuth, verification);
 router.post('/forgotPassword', forgotPassword);
 router.post('/resetPassword', verifyAuth, resetPassword);
+router.post('/addpost', addPost);
+router.post('/get-all-post', getAllPost);
 // router.get('/sso-login', verifyAuth, siginUser);
 
 export default router;
