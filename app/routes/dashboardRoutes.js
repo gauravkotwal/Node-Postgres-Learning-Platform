@@ -1,6 +1,6 @@
 /******************************************************************************
- *  @Execution      : default node : cmd> nodemon userRoute.js
- *  @description    : This file is used to create the API endpoints (route)
+ *  @Execution      : default node : cmd> nodemon postRoute.js
+ *  @description    : This file is used to create the post related API endpoints (route)
  * 
  *  @file           : BidMentor Backend Application
  *  @overview       : BidMentor is an innovative and interactive learning platform designed to revolutionize the way individuals acquire knowledge
@@ -13,25 +13,12 @@
 required files
 */
 import express from 'express';
-import {
-    createUser,
-    siginUser,
-    deleteUser,
-    getAllUser,
-    verification,
-    forgotPassword,
-    resetPassword
-} from '../controllers/usersController';
+import { addPost } from '../controllers/dashboardController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
-router.post('/signUp', createUser);
-router.post('/login', siginUser);
-router.post('/delete', deleteUser);
-router.get('/fetch-all-users', getAllUser);
-router.get('/verification', verifyAuth, verification);
-router.post('/forgotPassword', forgotPassword);
-router.post('/resetPassword', verifyAuth, resetPassword);
+router.post('/addpost', addPost);
+// router.post('/get-all-post', getAllPost);
 
 export default router;
