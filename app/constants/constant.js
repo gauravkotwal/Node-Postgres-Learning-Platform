@@ -14,6 +14,7 @@ export class Constants {
   first_name VARCHAR(100), 
   last_name VARCHAR(100), 
   password VARCHAR(100) NOT NULL,
+  post VARCHAR(250)[],
   created_on DATE NOT NULL,
   verification BOOLEAN DEFAULT false)`
   static DROP_TABLE = 'DROP TABLE IF EXISTS users'
@@ -21,7 +22,6 @@ export class Constants {
   static USER_POST_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS userPost (
     user_id VARCHAR(100),
     user_name VARCHAR(50) UNIQUE NOT NULL,
-    post VARCHAR(400),
     hide BOOLEAN,
     likes VARCHAR[],
     share VARCHAR[],
@@ -30,8 +30,8 @@ export class Constants {
   );`;
 
   static REGISTER_QUERY = `INSERT INTO
-      users(email, user_name, first_name, last_name, password, created_on)
-      VALUES($1, $2, $3, $4, $5, $6)
+      users(email, user_name, first_name, last_name, password, post, created_on)
+      VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING *`;
 
   static LOGIN_QUERY = 'SELECT * FROM users WHERE email = $1';

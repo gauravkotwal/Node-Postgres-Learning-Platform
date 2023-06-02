@@ -36,13 +36,13 @@ import sendmail from '../config/sendMail';
 * @returns {object} reflection object
 *********************************************************************************/
 const createUser = async (req, res) => {
-    const { email, user_name, first_name, last_name, password } = req.body;
+    const { email, user_name, first_name, last_name, password, post } = req.body;
 
     // timestamp for user creation
     const created_on = moment(new Date());
 
     // Parameter Check
-    if (isEmpty(email) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
+    if (isEmpty(email) || isEmpty(user_name) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
         errorMessage.error = 'Email, password, first name and last name field cannot be empty';
         return res.status(status.bad).send(errorMessage);
     }
@@ -70,6 +70,7 @@ const createUser = async (req, res) => {
         first_name,
         last_name,
         hashedPassword,
+        post,
         created_on,
     ];
 
@@ -168,7 +169,8 @@ const getAllUser = async (req, res) => {
                 userName: req.user_name,
                 email: req.email,
                 requestedDate: req.created_on,
-                verification: req.verification
+                verification: req.verification,
+                post: req.post
             })
         })
 
