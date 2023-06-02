@@ -16,6 +16,7 @@ import 'babel-polyfill';
 import cors from 'cors';
 const swagger = require('./app/config/swagger');
 import usersRoute from './app/routes/userRoute';
+import dashboardRoute from './app/routes/dashboardRoutes';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -34,6 +35,7 @@ swagger(app);
 
 // Use the Swagger route
 app.use('/v1', usersRoute);
+app.use('/v1', dashboardRoute);
 
 
 app.listen(process.env.PORT).on('listening', () => {

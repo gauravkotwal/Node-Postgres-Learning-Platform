@@ -37,13 +37,14 @@ const verifyToken = async (req, res, next) => {
   }
   try {
     const decoded = token ? jwt.verify(token, process.env.SECRET) : jwt.verify(paramToken, process.env.SECRET);
-    console.log("decoded ::::: ", decoded)
+    console.log("token decoded ::::: ", decoded)
 
     req.user = {
       email: decoded.email,
       user_id: decoded.user_id,
       first_name: decoded.first_name,
       last_name: decoded.last_name,
+      user_name: decoded.user_name
     };
     next();
   } catch (error) {

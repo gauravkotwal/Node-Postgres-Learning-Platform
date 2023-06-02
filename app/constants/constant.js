@@ -14,7 +14,7 @@ export class Constants {
   first_name VARCHAR(100), 
   last_name VARCHAR(100), 
   password VARCHAR(100) NOT NULL,
-  post VARCHAR(250)[],
+  post JSONB[],
   created_on DATE NOT NULL,
   verification BOOLEAN DEFAULT false)`
   static DROP_TABLE = 'DROP TABLE IF EXISTS users'
@@ -35,14 +35,11 @@ export class Constants {
       RETURNING *`;
 
   static LOGIN_QUERY = 'SELECT * FROM users WHERE email = $1';
-  static FETCHDATA_QUERY = `
-  UPDATE users
-  SET verification = true
-  WHERE email = $1 AND id = $2
-  RETURNING *;
-`;
+  static USERNAME_QUERY = 'SELECT * FROM users WHERE user_name $1 AND id = $2';
+  static FETCHDATA_QUERY = `UPDATE users SET verification = true WHERE email = $1 AND id = $2 RETURNING *`;
   static DELETE_QUERY = 'DELETE FROM users WHERE email = $1';
   static UPDATE_QUERY = ''; // Add your update query here
   static GETALLUSER_QUERY = 'SELECT * FROM users;'
   static RESETPASS_QUERY = `UPDATE users SET password = $1 WHERE email = $2 RETURNING *`;
+  static ADD_POST_QUERY = `UPDATE users SET post = post || $1 WHERE user_name = $2 AND id = $3 RETURNING *`;
 }

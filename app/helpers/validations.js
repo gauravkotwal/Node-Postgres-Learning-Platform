@@ -86,12 +86,13 @@ const empty = (input) => {
    * @param {string} id
    * @returns {string} token
    */
-const generateUserToken = (email, id, first_name, last_name) => {
+const generateUserToken = (email, id, first_name, last_name, user_name) => {
     const token = jwt.sign({
         email,
         user_id: id,
         first_name,
-        last_name
+        last_name,
+        user_name
     },
         process.env.SECRET, { expiresIn: '3d' });
     return token;

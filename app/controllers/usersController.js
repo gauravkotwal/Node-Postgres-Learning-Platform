@@ -77,9 +77,10 @@ const createUser = async (req, res) => {
     try {
         const { rows } = await dbQuery.query(createUserQuery, values);
         const dbResponse = rows[0];
+        console.log("dbResponse ::::: ", dbResponse);
 
         // A token has been generated for the logged-in user and attached into response
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.user_name);
 
         delete dbResponse.password;
         successMessage.data = dbResponse;
@@ -230,7 +231,7 @@ const siginUser = async (req, res) => {
         }
 
         // In next PR will also update these files
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.is_admin, dbResponse.first_name, dbResponse.last_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.user_name);
         delete dbResponse.password;
         successMessage.data = dbResponse;
         successMessage.data.token = token;

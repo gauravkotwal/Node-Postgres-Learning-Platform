@@ -36,60 +36,27 @@ import sendmail from '../config/sendMail';
 * @returns {object} reflection object
 *********************************************************************************/
 const addPost = async (req, res) => {
-    const { user_name, message, like, comment, share } = req.body;
+    const { post } = req.body;
+    const { user_name, user_id } = req.user;
 
-    // timestamp for user creation
-    const created_on = moment(new Date());
-
-    // Parameter Check
-    if (isEmpty(user_name) || isEmpty(message)) {
-        errorMessage.error = 'USername and message field cannot be empty';
-        return res.status(status.bad).send(errorMessage);
-    }
-
-    // Email Validation
-    if (!isValidEmail(email)) {
-        errorMessage.error = 'Please enter a valid Email';
-        return res.status(status.bad).send(errorMessage);
-    }
-
-    // Password alidation
-    if (!validatePassword(password)) {
-        errorMessage.error = 'Password must be more than five(5) characters';
-        return res.status(status.bad).send(errorMessage);
-    }
-
-    // Password encryption
-    const hashedPassword = hashPassword(password);
-
-    // db query used to ingest a user with provided values
-    const createUserQuery = Constants.REGISTER_QUERY;
-    const values = [
-        email,
-        first_name,
-        last_name,
-        hashedPassword,
-        created_on,
-    ];
+    // update the post into existing user
+    const updatePostQuery = Constants.ADD_POST_QUERY;
+    console.log("updatePostQuery ::::::: ", updatePostQuery)
 
     try {
-        const { rows } = await dbQuery.query(createUserQuery, values);
+        const { rows } = await dbQuery.query(updatePostQuery, [post, user_name, user_id]);
         const dbResponse = rows[0];
+        console.log("dbResponse ::::::: ", dbResponse)
 
-        // A token has been generated for the logged-in user and attached into response
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'User with this email does not exist';
+            return res.status(status.notfound).send(errorMessage);
+        }
 
         delete dbResponse.password;
         successMessage.data = dbResponse;
-
-        // User full name
-        const userName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
-        const subject = `Action Required: Verify Your Account for ${userName}`
-        const url = `http://localhost:3000/v1/verification?token=${encodeURIComponent(token)}`;
-
-        // sendmail for the verification
-        sendmail.sendmailServices(url, subject);
-        successMessage.message = "Signup email has been sent successfully! Please check your email and verify your account";
+        successMessage.message = "Post added!";
 
         return res.status(status.created).send(successMessage);
     } catch (error) {

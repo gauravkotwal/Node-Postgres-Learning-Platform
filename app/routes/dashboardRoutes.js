@@ -18,7 +18,7 @@ import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
-router.post('/addpost', addPost);
+router.post('/addpost', verifyAuth, addPost);
 // router.post('/get-all-post', getAllPost);
 
 export default router;
