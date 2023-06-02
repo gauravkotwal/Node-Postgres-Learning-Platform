@@ -7,9 +7,10 @@
 
 // Exporting the constants as a class
 export class Constants {
-  static TABLE_CREATION = `CREATE TABLE IF NOT EXISTS users
+  static USER_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS users
   (id SERIAL PRIMARY KEY, 
-  email VARCHAR(100) UNIQUE NOT NULL, 
+  email VARCHAR(100) UNIQUE NOT NULL,
+  user_name VARCHAR(50) UNIQUE NOT NULL, 
   first_name VARCHAR(100), 
   last_name VARCHAR(100), 
   password VARCHAR(100) NOT NULL,
@@ -17,9 +18,20 @@ export class Constants {
   verification BOOLEAN DEFAULT false)`
   static DROP_TABLE = 'DROP TABLE IF EXISTS users'
 
+  static USER_POST_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS userPost (
+    user_id VARCHAR(100),
+    user_name VARCHAR(50) UNIQUE NOT NULL,
+    post VARCHAR(400),
+    hide BOOLEAN,
+    likes VARCHAR[],
+    share VARCHAR[],
+    comment VARCHAR[],
+    creation_time TIMESTAMP
+  );`;
+
   static REGISTER_QUERY = `INSERT INTO
-      users(email, first_name, last_name, password, created_on)
-      VALUES($1, $2, $3, $4, $5)
+      users(email, user_name, first_name, last_name, password, created_on)
+      VALUES($1, $2, $3, $4, $5, $6)
       RETURNING *`;
 
   static LOGIN_QUERY = 'SELECT * FROM users WHERE email = $1';

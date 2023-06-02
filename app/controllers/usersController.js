@@ -36,7 +36,7 @@ import sendmail from '../config/sendMail';
 * @returns {object} reflection object
 *********************************************************************************/
 const createUser = async (req, res) => {
-    const { email, first_name, last_name, password } = req.body;
+    const { email, user_name, first_name, last_name, password } = req.body;
 
     // timestamp for user creation
     const created_on = moment(new Date());
@@ -66,6 +66,7 @@ const createUser = async (req, res) => {
     const createUserQuery = Constants.REGISTER_QUERY;
     const values = [
         email,
+        user_name,
         first_name,
         last_name,
         hashedPassword,
@@ -164,7 +165,7 @@ const getAllUser = async (req, res) => {
 
         rows.map(req => {
             finalResponse.push({
-                userName: `${req.first_name} ${req.last_name}`,
+                userName: req.user_name,
                 email: req.email,
                 requestedDate: req.created_on,
                 verification: req.verification
@@ -307,7 +308,7 @@ const forgotPassword = async (req, res) => {
         successMessage.message = `we've sent password reset instructions to the primary email address on the account`;
         successMessage.data = {
             email: dbResponse.email,
-            username: `${dbResponse.first_name} ${dbResponse.last_name}`,
+            username: dbResponse.user_name,
             token: token
         };
 
@@ -365,7 +366,7 @@ const resetPassword = async (req, res) => {
         successMessage.message = 'Password reset successfully!';
         successMessage.data = {
             email: dbResponse.email,
-            username: `${dbResponse.first_name} ${dbResponse.last_name}`
+            username: dbResponse.user_name
         };
 
         return res.status(status.success).send(successMessage);

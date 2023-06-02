@@ -23,9 +23,26 @@ pool.on('connect', () => {
  * Create User Table
  */
 const createUserTable = () => {
-    const userCreateQuery = Constants.TABLE_CREATION;
+    const userCreateQuery = Constants.USER_TABLE_CREATION;
 
     pool.query(userCreateQuery)
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        });
+};
+
+/**
+ * Create userPost Table
+ */
+const userPostTable = () => {
+    const userPosteQuery = Constants.USER_POST_TABLE_CREATION;
+
+    pool.query(userPosteQuery)
         .then((res) => {
             console.log(res);
             pool.end();
@@ -58,6 +75,7 @@ const dropUserTable = () => {
  */
 const createAllTables = () => {
     createUserTable();
+    userPostTable();
 };
 
 
