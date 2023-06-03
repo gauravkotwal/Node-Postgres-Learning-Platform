@@ -63,5 +63,10 @@ export class Constants {
   static UPDATE_QUERY = ''; // Add your update query here
   static GETALLUSER_QUERY = 'SELECT * FROM users;'
   static RESETPASS_QUERY = `UPDATE users SET password = $1 WHERE email = $2 RETURNING *`;
-  static ADD_POST_QUERY = `UPDATE users SET post = post || $1 WHERE username = $2 AND id = $3 RETURNING *`;
+
+  // Posts
+  static ADD_POST_QUERY = `INSERT INTO posts(user_id, content, created_on, updated_at)
+  VALUES($1, $2, $3, $4)
+  RETURNING *`;
+  static FETCH_ALL_POST_QUERY = `SELECT * FROM posts`;
 }

@@ -44,7 +44,7 @@ const verifyToken = async (req, res, next) => {
       user_id: decoded.user_id,
       first_name: decoded.first_name,
       last_name: decoded.last_name,
-      user_name: decoded.user_name
+      username: decoded.username
     };
     next();
   } catch (error) {

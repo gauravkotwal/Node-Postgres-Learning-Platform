@@ -26,7 +26,7 @@ import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
-router.post('/signUp', createUser);
+router.post('/register', createUser);
 router.post('/login', siginUser);
 router.post('/delete', deleteUser);
 router.get('/fetch-all-users', getAllUser);

@@ -16,7 +16,7 @@ import 'babel-polyfill';
 import cors from 'cors';
 const swagger = require('./app/config/swagger');
 import usersRoute from './app/routes/userRoute';
-import dashboardRoute from './app/routes/dashboardRoutes';
+import dashboardRoute from './app/routes/postsRoutes';
 
 import dotenv from 'dotenv';
 dotenv.config();
