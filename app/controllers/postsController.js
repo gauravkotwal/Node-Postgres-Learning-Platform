@@ -86,7 +86,7 @@ const getAllPost = async (req, res) => {
     try {
         const { rows } = await dbQuery.query(updatePostQuery, null);
         const dbResponse = rows;
-        console.log("dbResponse ::::::: ", dbResponse)
+        console.log("get all post dbResponse ::::::: ", dbResponse)
 
         // If email doesn't exist
         if (!dbResponse) {
