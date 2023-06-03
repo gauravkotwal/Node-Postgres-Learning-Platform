@@ -24,6 +24,7 @@ pool.on('connect', () => {
  */
 const createUserTable = () => {
     const userCreateQuery = Constants.USER_TABLE_CREATION;
+    console.log("userCreateQuery ::::: ", userCreateQuery);
 
     pool.query(userCreateQuery)
         .then((res) => {
@@ -37,12 +38,67 @@ const createUserTable = () => {
 };
 
 /**
- * Create userPost Table
+ * Create user Post Table
  */
 const userPostTable = () => {
-    const userPosteQuery = Constants.USER_POST_TABLE_CREATION;
+    const userPostQuery = Constants.USER_POST_TABLE_CREATION;
+    console.log("userPostQuery ::::: ", userPostQuery);
 
-    pool.query(userPosteQuery)
+    pool.query(userPostQuery)
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        });
+};
+
+/**
+ * Create user Likes Table
+ */
+const userLikesTable = () => {
+    const userLikeQuery = Constants.USER_LIKE_TABLE_CREATION;
+    console.log("userLikeQuery ::::: ", userLikeQuery);
+
+    pool.query(userLikeQuery)
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        });
+};
+
+/**
+ * Create user Comments Table
+ */
+const userCommentsTable = () => {
+    const userCommentQuery = Constants.USER_COMMENT_TABLE_CREATION;
+    console.log("userCommentQuery ::::: ", userCommentQuery);
+
+    pool.query(userCommentQuery)
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        });
+};
+
+/**
+ * Create user Accounts Table
+ */
+const userAccountsTable = () => {
+    const userAccountQuery = Constants.ACCOUNTS_TABLE_CREATION;
+    console.log("userAccountQuery ::::: ", userAccountQuery);
+
+    pool.query(userAccountQuery)
         .then((res) => {
             console.log(res);
             pool.end();
@@ -76,6 +132,9 @@ const dropUserTable = () => {
 const createAllTables = () => {
     createUserTable();
     userPostTable();
+    userLikesTable();
+    userCommentsTable();
+    userAccountsTable();
 };
 
 

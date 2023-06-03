@@ -36,13 +36,14 @@ import sendmail from '../config/sendMail';
 * @returns {object} reflection object
 *********************************************************************************/
 const createUser = async (req, res) => {
-    const { email, user_name, first_name, last_name, password, post } = req.body;
+    const { email, username, first_name, last_name, password } = req.body;
 
     // timestamp for user creation
     const created_on = moment(new Date());
+    const update_at = moment(new Date());
 
     // Parameter Check
-    if (isEmpty(email) || isEmpty(user_name) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
+    if (isEmpty(email) || isEmpty(username) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
         errorMessage.error = 'Email, password, first name and last name field cannot be empty';
         return res.status(status.bad).send(errorMessage);
     }
@@ -66,28 +67,28 @@ const createUser = async (req, res) => {
     const createUserQuery = Constants.REGISTER_QUERY;
     const values = [
         email,
-        user_name,
+        username,
         first_name,
         last_name,
         hashedPassword,
-        post,
         created_on,
+        update_at
     ];
 
     try {
         const { rows } = await dbQuery.query(createUserQuery, values);
         const dbResponse = rows[0];
-        console.log("dbResponse ::::: ", dbResponse);
+        console.log("create user dbResponse ::::: ", dbResponse);
 
         // A token has been generated for the logged-in user and attached into response
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.user_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.username);
 
         delete dbResponse.password;
         successMessage.data = dbResponse;
 
         // User full name
-        const userName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
-        const subject = `Action Required: Verify Your Account for ${userName}`
+        const userFullName = `"${successMessage.data.first_name} ${successMessage.data.last_name}"`;
+        const subject = `Action Required: Verify Your Account for ${userFullName}`
         const url = `http://localhost:3000/v1/verification?token=${encodeURIComponent(token)}`;
 
         // sendmail for the verification
@@ -96,6 +97,7 @@ const createUser = async (req, res) => {
 
         return res.status(status.created).send(successMessage);
     } catch (error) {
+        console.log("error ", error);
         if (error.routine === '_bt_check_unique') {
             errorMessage.error = 'User with that EMAIL already exist';
             return res.status(status.conflict).send(errorMessage);
@@ -167,11 +169,10 @@ const getAllUser = async (req, res) => {
 
         rows.map(req => {
             finalResponse.push({
-                userName: req.user_name,
+                userName: req.username,
                 email: req.email,
                 requestedDate: req.created_on,
-                verification: req.verification,
-                post: req.post
+                verification: req.verification
             })
         })
 
@@ -231,7 +232,7 @@ const siginUser = async (req, res) => {
         }
 
         // In next PR will also update these files
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.user_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.username);
         delete dbResponse.password;
         successMessage.data = dbResponse;
         successMessage.data.token = token;
@@ -306,12 +307,12 @@ const forgotPassword = async (req, res) => {
 
 
         // A token has been generated for the reset password
-        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name);
+        const token = generateUserToken(dbResponse.email, dbResponse.id, dbResponse.first_name, dbResponse.last_name, dbResponse.username);
 
         successMessage.message = `we've sent password reset instructions to the primary email address on the account`;
         successMessage.data = {
             email: dbResponse.email,
-            username: dbResponse.user_name,
+            username: dbResponse.username,
             token: token
         };
 
@@ -369,7 +370,7 @@ const resetPassword = async (req, res) => {
         successMessage.message = 'Password reset successfully!';
         successMessage.data = {
             email: dbResponse.email,
-            username: dbResponse.user_name
+            username: dbResponse.username
         };
 
         return res.status(status.success).send(successMessage);
