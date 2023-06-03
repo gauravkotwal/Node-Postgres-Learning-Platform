@@ -13,17 +13,17 @@
 required files
 */
 import express from 'express';
-import { addPost, getAllPost } from '../controllers/postsController';
+import { addPost, getAllPost, deletePost } from '../controllers/postsController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
 
 // Posts
-router.post('/addpost', verifyAuth, addPost);
+router.post('/add-post', verifyAuth, addPost);
 router.post('/get-all-post', verifyAuth, getAllPost);
 // router.post('/get-specific-post', verifyAuth, addPost);
 // router.post('/update-post', verifyAuth, addPost);
-// router.post('/delete-post', verifyAuth, addPost);
+router.post('/delete-post', verifyAuth, deletePost);
 
 // // Likes and Comments
 // router.post('/like', verifyAuth, addPost);

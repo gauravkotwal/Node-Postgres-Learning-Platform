@@ -69,4 +69,5 @@ export class Constants {
   VALUES($1, $2, $3, $4)
   RETURNING *`;
   static FETCH_ALL_POST_QUERY = `SELECT * FROM posts`;
+  static DELETE_POST_QUERY = `DELETE FROM posts WHERE id = $1 AND user_id = $2`;
 }
