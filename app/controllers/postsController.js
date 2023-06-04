@@ -139,8 +139,42 @@ const deletePost = async (req, res) => {
 };
 
 
+
+/*********************************************************************************
+* Update a Post
+* @param {object} req
+* @param {object} res
+* @returns {object} reflection object
+*********************************************************************************/
+const updatePost = async (req, res) => {
+    const { username, user_id } = req.user;
+    const { id } = req.body;
+
+    // update the post into existing user
+    const deletePostQuery = Constants.DELETE_POST_QUERY;
+
+    try {
+        const { rowCount } = await dbQuery.query(deletePostQuery, [id, user_id]);
+
+        // If post doesn't exist in the table
+        if (rowCount === 0) {
+            const errorMessage = { error: 'Post with this id does not exist' };
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        const successMessage = { message: 'Post deleted successfully' };
+        return res.status(status.success).send(successMessage);
+    } catch (error) {
+        console.log(error);
+        errorMessage.error = 'Operation was not successful';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     addPost,
     getAllPost,
-    deletePost
+    deletePost,
+    updatePost
 };
