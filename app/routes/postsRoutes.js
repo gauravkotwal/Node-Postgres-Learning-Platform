@@ -25,7 +25,7 @@ router.post('/get-all-post', verifyAuth, getAllPost);
 // router.post('/update-post', verifyAuth, addPost);
 router.post('/delete-post', verifyAuth, deletePost);
 
-// // Likes and Comments
+// Likes and Comments
 // router.post('/like', verifyAuth, addPost);
 // router.post('/unlike', verifyAuth, addPost);
 // router.post('/addcomment', verifyAuth, addPost);
