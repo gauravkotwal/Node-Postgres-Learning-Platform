@@ -1,0 +1,369 @@
+{
+	"info": {
+		"_postman_id": "22a65aac-30d0-4de1-ac2e-9917f928ea2e",
+		"name": "Node-Postgres-Learning-Platform Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abc@abc.com\",\r\n    \"username\": \"abc123\",\r\n    \"first_name\": \"Krishna\",\r\n    \"last_name\": \"ji\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abc@abc.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"tyson@abc.com\",\r\n    \"first_name\": \"Tyson\",\r\n    \"last_name\": \"Bruh\",\r\n    \"password\": \"Password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/v1/fetch-all-users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"fetch-all-users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SSO Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BnbWFpbC5jb20iLCJ1c2VyX2lkIjoyMCwiZmlyc3RfbmFtZSI6IlJhbSIsImxhc3RfbmFtZSI6IlJhZ2hhdiIsInBhc3N3b3JkIjoiJDJhJDEwJHExb0JpLi54TUJTQUtkeEtNSE16NGVkdTdkeDk2TmdteHBwY0ZXUmdUWC9Qbi5UcFUvT05HIiwiaWF0IjoxNjg1MjU1NTAyLCJleHAiOjE2ODU1MTQ3MDJ9.hay-fGs4E-hgK2JrWWUYre2-48eFU1BgwVHZi9it2QI",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/v1/sso-login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"sso-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"tyason@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/v1/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abc@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/forgotPassword",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BhYmMuY29tIiwidXNlcl9pZCI6NiwiZmlyc3RfbmFtZSI6IktyaXNobmEiLCJsYXN0X25hbWUiOiJqaSIsInVzZXJfbmFtZSI6ImFiYzEyMyIsImlhdCI6MTY4NTc2Nzg1MiwiZXhwIjoxNjg2MDI3MDUyfQ.MQu1bBalgTKQ0w_39kDESdgsMV6lxPkEG0uOr-m1T2M",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\" : \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/resetPassword",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"resetPassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "Add Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BhYmMuY29tIiwidXNlcl9pZCI6NiwiZmlyc3RfbmFtZSI6IktyaXNobmEiLCJsYXN0X25hbWUiOiJqaSIsInVzZXJuYW1lIjoiYWJjMTIzIiwiaWF0IjoxNjg1NzY4ODIxLCJleHAiOjE2ODYwMjgwMjF9.ZqN7fOr-R_HcfIg-ZfLmvbPzn_1u2s8q8kGNncWyDu4",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"Second post\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/add-post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"add-post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrive All Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BhYmMuY29tIiwidXNlcl9pZCI6NiwiZmlyc3RfbmFtZSI6IktyaXNobmEiLCJsYXN0X25hbWUiOiJqaSIsInVzZXJuYW1lIjoiYWJjMTIzIiwiaWF0IjoxNjg1NzY5MzQxLCJleHAiOjE2ODYwMjg1NDF9.CSncxiRolOfi8jRgJQzp81w7VaEf_OlLOdcKPvkWBAg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/get-all-post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"get-all-post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BhYmMuY29tIiwidXNlcl9pZCI6NiwiZmlyc3RfbmFtZSI6IktyaXNobmEiLCJsYXN0X25hbWUiOiJqaSIsInVzZXJuYW1lIjoiYWJjMTIzIiwiaWF0IjoxNjg1NzY5MzQxLCJleHAiOjE2ODYwMjg1NDF9.CSncxiRolOfi8jRgJQzp81w7VaEf_OlLOdcKPvkWBAg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/delete-post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"delete-post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiY0BhYmMuY29tIiwidXNlcl9pZCI6NiwiZmlyc3RfbmFtZSI6IktyaXNobmEiLCJsYXN0X25hbWUiOiJqaSIsInVzZXJuYW1lIjoiYWJjMTIzIiwiaWF0IjoxNjg1NzY5MzQxLCJleHAiOjE2ODYwMjg1NDF9.CSncxiRolOfi8jRgJQzp81w7VaEf_OlLOdcKPvkWBAg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/delete-post",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"delete-post"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
