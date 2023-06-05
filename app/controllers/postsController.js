@@ -148,13 +148,13 @@ const deletePost = async (req, res) => {
 *********************************************************************************/
 const updatePost = async (req, res) => {
     const { username, user_id } = req.user;
-    const { id } = req.body;
+    const { id, newContent } = req.body;
 
     // update the post into existing user
-    const deletePostQuery = Constants.DELETE_POST_QUERY;
+    const deletePostQuery = Constants.UPDATE_POST_QUERY;
 
     try {
-        const { rowCount } = await dbQuery.query(deletePostQuery, [id, user_id]);
+        const { rowCount } = await dbQuery.query(deletePostQuery, [newContent, id, user_id]);
 
         // If post doesn't exist in the table
         if (rowCount === 0) {
@@ -162,7 +162,7 @@ const updatePost = async (req, res) => {
             return res.status(status.notfound).send(errorMessage);
         }
 
-        const successMessage = { message: 'Post deleted successfully' };
+        const successMessage = { message: 'Post update successfully' };
         return res.status(status.success).send(successMessage);
     } catch (error) {
         console.log(error);
