@@ -24,7 +24,7 @@ export class Constants {
     user_id INTEGER REFERENCES users (id),
     content TEXT,
     created_on DATE NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    updated_at DATE NOT NULL
   )`;
   static USER_LIKE_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
@@ -38,7 +38,7 @@ export class Constants {
     user_id INTEGER REFERENCES users (id),
     content TEXT,
     created_on DATE NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    updated_at DATE NOT NULL
   )`;
   static ACCOUNTS_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
@@ -46,8 +46,8 @@ export class Constants {
     account_type VARCHAR(20),
     bio TEXT,
     profile_image_url VARCHAR(255),
-    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_on DATE NOT NULL,
+    updated_at DATE NOT NULL
   )`
 
   // Drop Table
@@ -72,4 +72,6 @@ export class Constants {
   static DELETE_POST_QUERY = `DELETE FROM posts WHERE id = $1 AND user_id = $2`;
   static FETCH_SPECIFIC_POST_QUERY = `SELECT * FROM posts WHERE id = $1 AND user_id = $2`;
   static UPDATE_POST_QUERY = `UPDATE posts SET content = $1 WHERE id = $2 AND user_id = $3 RETURNING *`;
+  static FETCH_SPECIFIC_POST_QUERY = `SELECT * FROM posts WHERE id = $1 AND user_id = $2`;
+  static UPDATE_POST_QUERY = `UPDATE posts SET content = $1, updated_at = $2 WHERE id = $3 AND user_id = $4 RETURNING *`;
 }

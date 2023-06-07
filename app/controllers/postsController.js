@@ -154,7 +154,7 @@ const updatePost = async (req, res) => {
     const deletePostQuery = Constants.UPDATE_POST_QUERY;
 
     try {
-        const { rowCount } = await dbQuery.query(deletePostQuery, [newContent, id, user_id]);
+        const { rowCount } = await dbQuery.query(deletePostQuery, [newContent, moment(new Date()), id, user_id]);
 
         // If post doesn't exist in the table
         if (rowCount === 0) {
