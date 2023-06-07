@@ -13,7 +13,7 @@
 required files
 */
 import express from 'express';
-import { addPost, getAllPost, deletePost, updatePost } from '../controllers/postsController';
+import { addPost, getAllPost, deletePost, updatePost, getSpecificPost } from '../controllers/postsController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
@@ -21,7 +21,7 @@ const router = express.Router();
 // Posts
 router.post('/add-post', verifyAuth, addPost);
 router.post('/get-all-post', verifyAuth, getAllPost);
-// router.post('/get-specific-post', verifyAuth, addPost);
+router.post('/get-specific-post', verifyAuth, getSpecificPost);
 router.post('/update-post', verifyAuth, updatePost);
 router.post('/delete-post', verifyAuth, deletePost);
 

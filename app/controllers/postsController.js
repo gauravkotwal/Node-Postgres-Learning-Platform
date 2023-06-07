@@ -172,9 +172,47 @@ const updatePost = async (req, res) => {
 };
 
 
+
+/*********************************************************************************
+* Retrive Specific Post
+* @param {object} req
+* @param {object} res
+* @returns {object} reflection object
+*********************************************************************************/
+const getSpecificPost = async (req, res) => {
+    const { username, user_id } = req.user;
+    const { id } = req.body;
+
+    // update the post into existing user
+    const fetchPostQuery = Constants.FETCH_SPECIFIC_POST_QUERY;
+
+    try {
+        const { rows } = await dbQuery.query(fetchPostQuery, [id, user_id]);
+        const dbResponse = rows[0];
+        console.log("get specific post data dbResponse ::::::: ", dbResponse)
+
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'No Record Found';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        delete dbResponse.password;
+        successMessage.data = dbResponse;
+        successMessage.message = "Fetched Specific the posts";
+
+        return res.status(status.created).send(successMessage);
+    } catch (error) {
+        errorMessage.error = 'Operation was not successful';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     addPost,
     getAllPost,
     deletePost,
-    updatePost
+    updatePost,
+    getSpecificPost
 };
