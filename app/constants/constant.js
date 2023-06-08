@@ -28,7 +28,7 @@ export class Constants {
   )`;
   static USER_LIKE_TABLE_CREATION = `CREATE TABLE IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
-    post_id INTEGER REFERENCES posts (id),
+    post_id INTEGER UNIQUE REFERENCES posts (id),
     user_id INTEGER REFERENCES users (id),
     created_on DATE NOT NULL
   )`;
@@ -74,4 +74,7 @@ export class Constants {
   static UPDATE_POST_QUERY = `UPDATE posts SET content = $1 WHERE id = $2 AND user_id = $3 RETURNING *`;
   static FETCH_SPECIFIC_POST_QUERY = `SELECT * FROM posts WHERE id = $1 AND user_id = $2`;
   static UPDATE_POST_QUERY = `UPDATE posts SET content = $1, updated_at = $2 WHERE id = $3 AND user_id = $4 RETURNING *`;
+
+  // Like
+  static LIKE_POST_QUERY = `INSERT INTO likes(post_id, user_id, created_on) VALUES($1, $2, $3) RETURNING *`;
 }
