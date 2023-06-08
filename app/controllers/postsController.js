@@ -165,7 +165,6 @@ const updatePost = async (req, res) => {
         const successMessage = { message: 'Post update successfully' };
         return res.status(status.success).send(successMessage);
     } catch (error) {
-        console.log(error);
         errorMessage.error = 'Operation was not successful';
         return res.status(status.error).send(errorMessage);
     }
@@ -209,10 +208,51 @@ const getSpecificPost = async (req, res) => {
 };
 
 
+
+/*********************************************************************************
+* Like Post
+* @param {object} req
+* @param {object} res
+* @returns {object} reflection object
+*********************************************************************************/
+const likePost = async (req, res) => {
+    const { username, user_id } = req.user;
+    const { postId } = req.body;
+
+    // update the post into existing user
+    const likePostQuery = Constants.LIKE_POST_QUERY;
+
+    try {
+        const { rows } = await dbQuery.query(likePostQuery, [postId, user_id, moment(new Date())]);
+        const dbResponse = rows[0];
+        console.log("Like updated ::::::: ", dbResponse)
+
+        // If email doesn't exist
+        if (!dbResponse) {
+            errorMessage.error = 'Please try again !!';
+            return res.status(status.notfound).send(errorMessage);
+        }
+
+        successMessage.data = dbResponse;
+        successMessage.message = "Post has been Liked";
+
+        return res.status(status.created).send(successMessage);
+    } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+            errorMessage.error = 'This post is already liked';
+            return res.status(status.conflict).send(errorMessage);
+        }
+        errorMessage.error = 'Operation was not successful';
+        return res.status(status.error).send(errorMessage);
+    }
+};
+
+
 export {
     addPost,
     getAllPost,
     deletePost,
     updatePost,
-    getSpecificPost
+    getSpecificPost,
+    likePost
 };

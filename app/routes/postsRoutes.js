@@ -13,7 +13,7 @@
 required files
 */
 import express from 'express';
-import { addPost, getAllPost, deletePost, updatePost, getSpecificPost } from '../controllers/postsController';
+import { addPost, getAllPost, deletePost, updatePost, getSpecificPost, likePost } from '../controllers/postsController';
 import verifyAuth from '../helpers/verifyAuth';
 
 const router = express.Router();
@@ -25,9 +25,11 @@ router.post('/get-specific-post', verifyAuth, getSpecificPost);
 router.post('/update-post', verifyAuth, updatePost);
 router.post('/delete-post', verifyAuth, deletePost);
 
-// Likes and Comments
-// router.post('/like', verifyAuth, addPost);
+// Likes
+router.post('/like', verifyAuth, likePost);
 // router.post('/unlike', verifyAuth, addPost);
+
+// Comments
 // router.post('/addcomment', verifyAuth, addPost);
 // router.post('/updatecomment', verifyAuth, addPost);
 // router.post('/deletecomment', verifyAuth, addPost);
